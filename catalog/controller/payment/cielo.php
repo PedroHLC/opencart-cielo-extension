@@ -34,8 +34,8 @@ class ControllerPaymentCielo extends Controller {
 		$Pedido = new Pedido();
 
 		/* Lê dados do $_POST */
-		if (!isset($_POST["bandeira"])){
-			echo "WTF? KD A BANDEIRA??"; die();
+		if (!isset($_POST["bandeira"]) || !isset($_POST["formaPagamento"])){
+			echo "Informe todos os dados do cartão!"; die();
 		}
 		$Pedido->formaPagamentoBandeira = $_POST["bandeira"];
 		if($_POST["formaPagamento"] != "A" && $_POST["formaPagamento"] != "1") {
@@ -53,9 +53,9 @@ class ControllerPaymentCielo extends Controller {
 		$Pedido->dadosEcChave = CIELO_CHAVE;
 
 		$Pedido->capturar = true;
-		$Pedido->autorizar = 2;
+		$Pedido->autorizar = 1;
 	
-		if(true)//($this->config->get('cielo_webserv') == 1)
+		if($this->config->get('cielo_webserv') == 1)
 		{
 			$Pedido->dadosPortadorNumero = $_POST["cartaoNumero"];
 			$Pedido->dadosPortadorVal = $_POST["cartaoValidade"];
@@ -143,7 +143,7 @@ class ControllerPaymentCielo extends Controller {
 
 		/* Atualiza status */
 		$Pedido->status = $objResposta->status;
-		
+
 		if($Pedido->status == '4' || $Pedido->status == '6')
 			$finalizacao = 'Aprovado';
 		else

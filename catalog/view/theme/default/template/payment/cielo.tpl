@@ -65,8 +65,12 @@ $valor_total = str_replace(".","",$valor_total);
 		</tr>
 		<tr>
 			<?php if ($this->config->get('cielo_webserv') == 1) { ?>
-				<h4><strong>Dados do cartão</strong></h4>
 				<table border="0">
+					<tr>
+						<td colspan="2">
+							<h4><strong>Dados do cartão</strong></h4>
+						</td>
+					</tr>
 					<tr>
 						<td>Número</td>
 						<td><input type="text" name="cartaoNumero" value="4551870000000183"></td>
