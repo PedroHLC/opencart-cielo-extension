@@ -34,6 +34,9 @@ class ControllerPaymentCielo extends Controller {
 		$Pedido = new Pedido();
 
 		/* Lê dados do $_POST */
+		if (!isset($_POST["bandeira"])){
+			echo "WTF? KD A BANDEIRA??"; die();
+		}
 		$Pedido->formaPagamentoBandeira = $_POST["bandeira"];
 		if($_POST["formaPagamento"] != "A" && $_POST["formaPagamento"] != "1") {
 			$Pedido->formaPagamentoProduto = $this->config->get('cielo_parcelamento');
@@ -51,14 +54,51 @@ class ControllerPaymentCielo extends Controller {
 
 		$Pedido->capturar = true;
 		$Pedido->autorizar = 2;
+	
+		if(true)//($this->config->get('cielo_webserv') == 1)
+		{
+			$Pedido->dadosPortadorNumero = $_POST["cartaoNumero"];
+			$Pedido->dadosPortadorVal = $_POST["cartaoValidade"];
+
+			if ($_POST["cartaoCodigoSeguranca"] == null || $_POST["cartaoCodigoSeguranca"] == "")
+			{
+				$Pedido->dadosPortadorInd = "0";
+			}
+			else if ($Pedido->formaPagamentoBandeira == "mastercard")
+			{
+				$Pedido->dadosPortadorInd = "1";
+			}
+			else 
+			{
+				$Pedido->dadosPortadorInd = "1";
+			}
+			$Pedido->dadosPortadorCodSeg = $_POST["cartaoCodigoSeguranca"];
+		}
 
 		$Pedido->dadosPedidoNumero = $_POST['pedido'];
 		$Pedido->dadosPedidoValor  = str_replace(',','',$_POST['valor_total']);
 
 		$Pedido->urlRetorno = ReturnURL();
 
-		/* Envia a requisição ao site da Cielo */
-		$objResposta = $Pedido->RequisicaoTransacao(false);
+		// ENVIA REQUISIÇÃO SITE CIELO
+		if($this->config->get('cielo_webserv') == 1)
+		{
+			if($this->config->get('cielo_tryauth') == 1) // TRANSAÇÃO
+			{
+				$objResposta = $Pedido->RequisicaoTransacao(true);
+			}
+			else // AUTORIZAÇÃO DIRETA 
+			{	$objResposta = $Pedido->RequisicaoTid();
+				
+				$Pedido->tid = $objResposta->tid;
+				$Pedido->pan = $objResposta->pan;
+				$Pedido->status = $objResposta->status;
+				
+				$objResposta = $Pedido->RequisicaoAutorizacaoPortador();
+			}
+		} else {
+			$objResposta = $Pedido->RequisicaoTransacao(false);
+		}
 
 		$Pedido->tid = $objResposta->tid;
 		$Pedido->pan = $objResposta->pan;
@@ -70,10 +110,19 @@ class ControllerPaymentCielo extends Controller {
 		/* Serializa Pedido e guarda na SESSION */
 		$StrPedido = $Pedido->ToString();
 		$_SESSION["pedidos"]->append($StrPedido);
-
-		echo '<script type="text/javascript">
-				window.location.href = "' . $Pedido->urlAutenticacao . '"
-			  </script>';
+		
+		if(strlen($Pedido->urlAutenticacao) > 0)//($this->config->get('cielo_webserv') == 1 && $this->config->get('cielo_tryauth') == 1)
+		{
+			echo '<script type="text/javascript">
+					window.location.href = "' .$Pedido->urlAutenticacao. '"
+				 </script>';
+		}
+		else 
+		{
+			echo '<script type="text/javascript">
+					window.location.href = "index.php?route=payment/cielo/retorno"
+				 </script>';
+		}
 	}
 
 	function retorno() {

@@ -48,6 +48,8 @@ class ControllerPaymentCielo extends Controller {
 		$this->data['entry_geo_zone'] = $this->language->get('entry_geo_zone');
 		$this->data['entry_status'] = $this->language->get('entry_status');
 		$this->data['entry_sort_order'] = $this->language->get('entry_sort_order');
+		$this->data['entry_webserv'] = $this->language->get('entry_webserv');
+		$this->data['entry_tryauth'] = $this->language->get('entry_tryauth');
 
 		$this->data['button_save'] = $this->language->get('button_save');
 		$this->data['button_cancel'] = $this->language->get('button_cancel');
@@ -134,6 +136,18 @@ class ControllerPaymentCielo extends Controller {
 			$this->data['cielo_teste'] = $this->request->post['cielo_teste'];
 		} else {
 			$this->data['cielo_teste'] = $this->config->get('cielo_teste');
+		}		
+
+		if (isset($this->request->post['cielo_webserv'])) {
+			$this->data['cielo_webserv'] = $this->request->post['cielo_webserv'];
+		} else {
+			$this->data['cielo_webserv'] = $this->config->get('cielo_webserv');
+		}		
+
+		if (isset($this->request->post['cielo_tryauth'])) {
+			$this->data['cielo_tryauth'] = $this->request->post['cielo_tryauth'];
+		} else {
+			$this->data['cielo_tryauth'] = $this->config->get('cielo_tryauth');
 		}
 		
 		if (isset($this->request->post['cielo_parcelamento'])) {

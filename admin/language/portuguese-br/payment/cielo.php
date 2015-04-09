@@ -31,6 +31,8 @@ $_['entry_nao_aprovado']      	 = 'Situação do Pedido se Não Aprovado:';
 $_['entry_geo_zone']             = 'Região Geográfica:';
 $_['entry_status']               = 'Situação:';
 $_['entry_sort_order']           = 'Ordem:';
+$_['entry_webserv']              = 'Manter ambiente:';
+$_['entry_tryauth'] 	         = 'Autenticar:';
 
 // Error
 $_['error_permission']           = 'Atenção: Você não possui permissão para modificar o módulo Cielo!';

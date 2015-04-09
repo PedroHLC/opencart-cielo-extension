@@ -13,55 +13,74 @@ $valor_total = str_replace(".","",$valor_total);
 		<tr>
 			<td>
 				<div style="width:700px;text-align:center">
-				<? if ($this->config->get('entry_cartao_visae') == 1) { ?>
+				<?php if ($this->config->get('entry_cartao_visae') == 1) { ?>
 				<div style="width:90px;height:80px;text-align:center;display:inline-table">
 					<!--Constante HTTP_IMAGE foi removida do OC à tempos, substituido por 'image'-->
 					<img src="image/cielo/visa_electron.jpg" /><br />
 					<input onchange="javascript:fm_pagamento(this.value,'<?php echo $this->config->get('cielo_visae_parcelas');?>','D');" type="radio" id="bandeira" name="bandeira" value="visa" />
 				</div>
-				<? }?>
-				<? if ($this->config->get('cielo_cartao_visa') == 1) { ?>
+				<?php }?>
+				<?php if ($this->config->get('cielo_cartao_visa') == 1) { ?>
 				<div style="width:90px;height:80px;text-align:center;display:inline-table">
 					<img src="image/cielo/visa.jpg" /><br />
 					<input onchange="javascript:fm_pagamento(this.value,'<?php echo $this->config->get('cielo_visa_parcelas');?>','C');" type="radio" id="bandeira" name="bandeira" value="visa" />
 				</div>
-				<? }?>
-				<? if ($this->config->get('cielo_cartao_mastercard') == 1) { ?>
+				<?php }?>
+				<?php if ($this->config->get('cielo_cartao_mastercard') == 1) { ?>
 				<div style="width:90px;height:80px;text-align:center;display:inline-table">
 					<img src="image/cielo/mastercard.jpg" /><br />
 					<input onchange="javascript:fm_pagamento(this.value,'<?php echo $this->config->get('cielo_mastercard_parcelas','C');?>');" type="radio" id="bandeira" name="bandeira" value="mastercard" />
 				</div>
-				<? }?>
-				<? if ($this->config->get('cielo_cartao_diners') == 1) { ?>
+				<?php }?>
+				<?php if ($this->config->get('cielo_cartao_diners') == 1) { ?>
 				<div style="width:90px;height:80px;text-align:center;display:inline-table">
 					<img src="image/cielo/diners.jpg" /><br />
 					<input onchange="javascript:fm_pagamento(this.value,'<?php echo $this->config->get('cielo_diners_parcelas');?>','C');" type="radio" id="bandeira" name="bandeira" value="diners" />
 				</div>
-				<? }?>
-				<? if ($this->config->get('cielo_cartao_discover') == 1) { ?>
+				<?php }?>
+				<?php if ($this->config->get('cielo_cartao_discover') == 1) { ?>
 				<div style="width:90px;height:80px;text-align:center;display:inline-table">
 					<img src="image/cielo/discover.jpg" /><br />
 					<input onchange="javascript:fm_pagamento(this.value,'<?php echo $this->config->get('cielo_discover_parcelas');?>','C');" type="radio" id="bandeira" name="bandeira" value="discover" />
 				</div>
-				<? }?>
-				<? if ($this->config->get('cielo_cartao_elo') == 1) { ?>
+				<?php }?>
+				<?php if ($this->config->get('cielo_cartao_elo') == 1) { ?>
 				<div style="width:90px;height:80px;text-align:center;display:inline-table">
 					<img src="image/cielo/elo.jpg" /><br />
 					<input onchange="javascript:fm_pagamento(this.value,'<?php echo $this->config->get('cielo_elo_parcelas');?>','C');" type="radio" id="bandeira" name="bandeira" value="elo" />
 				</div>
-				<? }?>
-				<? if ($this->config->get('cielo_cartao_amex') == 1) { ?>
+				<?php }?>
+				<?php if ($this->config->get('cielo_cartao_amex') == 1) { ?>
 				<div style="width:90px;height:80px;text-align:center;display:inline-table">
 					<img src="image/cielo/amex.jpg" /><br />
 					<input onchange="javascript:fm_pagamento(this.value,'<?php echo $this->config->get('cielo_amex_parcelas');?>','C');" type="radio" id="bandeira" name="bandeira" value="amex" />
 				</div>
-				<? }?>
+				<?php }?>
 				</div>
 				<br><br>
 			</td>
 		</tr>
 		<tr>
 			<td id="parcelas"><td>
+		</tr>
+		<tr>
+			<?php if ($this->config->get('cielo_webserv') == 1) { ?>
+				<h4><strong>Dados do cartão</strong></h4>
+				<table border="0">
+					<tr>
+						<td>Número</td>
+						<td><input type="text" name="cartaoNumero" value="4551870000000183"></td>
+					</tr>
+					<tr>
+						<td>Validade (jun/2010 = 201006)</td>
+						<td><input type="text" name="cartaoValidade" value="201508"></td>
+					</tr>
+					<tr>
+						<td>Cód. Segurança</td>
+						<td><input type="text" name="cartaoCodigoSeguranca" value="973"></td>
+					</tr>												
+				</table>
+			<?php }?>
 		</tr>
 	</table>
 	</center>
@@ -82,8 +101,7 @@ function fm_pagamento(bandeira,parcelas,operacao) {
 		type: 'GET',
 		cache: false,
 		dataType: 'html',
-		//success: function(data) {$('#parcelas').html(data);}
-		success: function(data) {$('#parcelas').html("Não implementado ainda a venda direta pela loja!");}
+		success: function(data) {$('#parcelas').html(data);}
 	});
 }
 </script>
