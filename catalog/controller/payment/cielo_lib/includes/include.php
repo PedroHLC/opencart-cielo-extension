@@ -28,7 +28,7 @@ function httprequest($paEndereco, $paPost){
 	curl_setopt($sessao_curl, CURLOPT_SSL_VERIFYPEER, true);
 	curl_setopt($sessao_curl, CURLOPT_SSL_VERIFYHOST, 2);
 	curl_setopt($sessao_curl, CURLOPT_CAINFO, DIR_APPLICATION . "controller/payment/cielo_lib/ssl/VeriSignClass3PublicPrimaryCertificationAuthority-G5.crt");
-	curl_setopt($sessao_curl, CURLOPT_SSLVERSION, 3);
+	curl_setopt($sessao_curl, CURLOPT_SSLVERSION, 4);
 	curl_setopt($sessao_curl, CURLOPT_CONNECTTIMEOUT, 10);
 	curl_setopt($sessao_curl, CURLOPT_TIMEOUT, 40);
 	curl_setopt($sessao_curl, CURLOPT_RETURNTRANSFER, true);
